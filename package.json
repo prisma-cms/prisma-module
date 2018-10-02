@@ -1,10 +1,11 @@
 {
   "name": "@prisma-cms/prisma-module",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Describe @prisma-cms/prisma-module here",
   "main": "lib/index.js",
   "module": "es/index.js",
   "files": [
+    "src",
     "es",
     "lib",
     "umd"
