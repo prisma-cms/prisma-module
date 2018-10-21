@@ -1,0 +1,8 @@
+
+type User{
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  username: String
+  Files: [File!]!
+}

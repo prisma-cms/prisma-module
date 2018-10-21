@@ -1,0 +1,46 @@
+
+
+
+type Mutation {
+
+  signup(
+    data: UserCreateInput!
+  ): AuthPayload!
+
+  # signin(username: String!, password: String!): AuthPayload!
+
+  signin(
+    where: UserWhereUniqueInput!, 
+    # identity: String!
+    password: String!
+  ): AuthPayload!
+
+  createUserProcessor(
+    data: UserCreateInput!
+  ): UserResponse!
+ 
+
+  updateUserProcessor(
+    id: ID
+    where: UserWhereUniqueInput
+    data: UserUpdateInput!
+  ): UserResponse!
+
+  resetPassword(
+    where: UserWhereUniqueInput!
+  ): Boolean!
+   
+
+  singleUpload (file: Upload!): File
+  multipleUpload (files: [Upload!]!): [File!]
+
+  createChatMessageProcessor (
+    data: ChatMessageCreateInput!
+  ): ChatMessageResponse!
+
+  chatMessageMarkAsReaded (
+    id: ID!
+  ): ChatMessageResponse!
+
+}
+

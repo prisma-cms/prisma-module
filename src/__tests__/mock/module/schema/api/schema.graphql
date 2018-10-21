@@ -1,0 +1,28 @@
+ 
+scalar Upload
+
+
+type Error {
+  key: String!
+  message: String!
+}
+
+ 
+ 
+type UserResponse {
+  success: Boolean!
+  message: String
+  errors: [Error!]!
+  data: User
+}
+ 
+ 
+type AuthPayload {
+  success: Boolean!
+  message: String
+  errors: [Error!]!
+  token: String
+  data: User
+}
+
+ 

@@ -1,0 +1,9 @@
+
+type User {
+  test: String
+}
+
+type Profile {
+  id: ID!
+  User: User!
+}

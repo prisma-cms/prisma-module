@@ -1,0 +1,13 @@
+ 
+type Query { 
+  me: User
+}
+
+
+type User implements Node { 
+
+
+  # Custom
+  hasEmail: Boolean!
+  hasPhone: Boolean!
+}
