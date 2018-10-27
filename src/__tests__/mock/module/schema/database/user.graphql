@@ -6,3 +6,27 @@ type User{
   username: String
   Files: [File!]!
 }
+
+
+
+input UserCreateInput {
+  username: String
+  email: String
+  phone: String
+  phoneComment: String
+  showEmail: Boolean
+  showPhone: Boolean
+  password: String
+  fullname: String
+  image: String
+  address: String
+  sudo: Boolean
+  active: Boolean
+  activated: Boolean
+  deleted: Boolean
+}
+
+enum EnumFields {
+  Field
+  Field2
+}

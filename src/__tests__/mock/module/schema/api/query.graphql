@@ -6,7 +6,6 @@ type Query {
 
 type User implements Node { 
 
-
   # Custom
   hasEmail: Boolean!
   hasPhone: Boolean!
