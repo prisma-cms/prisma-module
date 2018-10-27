@@ -1,0 +1,11 @@
+
+
+
+type Mutation {
+
+  shouldBeRemovedInAPI(
+    data: UserCreateInput!
+  ): AuthPayload!
+
+}
+
