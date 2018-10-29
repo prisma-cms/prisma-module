@@ -1,3 +1,7 @@
+1.2.1-beta
+===================================
+- Fix getExcludableApiTypes
+
 1.2.0-beta
 ===================================
 - Global code refactoring. Move to .mjs

@@ -101,15 +101,7 @@ export default class PrismaModule {
 
     let baseSchema = mergeTypes(types, { all: true });
 
-
     excludeTypes = excludeTypes.concat(this.getExcludableApiTypes());
-
-    excludeTypes = [... new Set(excludeTypes)]
-
-
-    // console.log(chalk.green("getApiSchema excludeTypes"), excludeTypes);
-
-    baseSchema = this.cleanupApiSchema(baseSchema, excludeTypes);
 
 
     this.getModules().map(n => {
@@ -125,6 +117,9 @@ export default class PrismaModule {
 
     let apiSchema = mergeTypes([baseSchema].concat(typesArray), { all: true });
 
+    apiSchema = this.cleanupApiSchema(apiSchema, excludeTypes);
+
+
     return apiSchema;
 
   }
@@ -133,7 +128,6 @@ export default class PrismaModule {
   cleanupApiSchema(baseSchema, excludeTypes = []) {
 
     if (excludeTypes.length) {
-
 
       const parsed = parse(baseSchema);
 
@@ -154,7 +148,6 @@ export default class PrismaModule {
 
   cleanupDefinitions(schema, excludeTypes) {
 
-    // console.log(chalk.green("cleanupDefinitions"), excludeTypes, schema);
 
     let {
       definitions,
@@ -163,6 +156,8 @@ export default class PrismaModule {
     if (excludeTypes && definitions) {
 
       excludeTypes.map(excludeName => {
+
+        const before = definitions.length;
 
         definitions.reduce((current, next) => {
 
@@ -190,6 +185,9 @@ export default class PrismaModule {
 
         }, definitions);
 
+        const after = definitions.length;
+
+
       });
 
     }
@@ -198,6 +196,9 @@ export default class PrismaModule {
 
 
 
+  /**
+   * Exclude from all levels event upper
+   */
   getExcludableApiTypes(excludeTypes = []) {
 
     this.getModules().map(n => {
@@ -205,8 +206,6 @@ export default class PrismaModule {
       excludeTypes = excludeTypes.concat(n.getExcludableApiTypes());
 
     });
-
-    // console.log("getExcludableApiTypes", excludeTypes);
 
     return excludeTypes;
   }
@@ -217,6 +216,5 @@ export default class PrismaModule {
     return this.modules;
 
   }
-
 
 }

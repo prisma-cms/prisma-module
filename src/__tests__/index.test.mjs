@@ -93,7 +93,7 @@ const requiredTypes = [
 ]
 
 
-const verifyTypes = function (types, requiredTypes, verbose = true) {
+const verifyTypes = function (types, requiredTypes, verbose = false) {
 
 
   if (verbose) {
