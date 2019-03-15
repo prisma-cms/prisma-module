@@ -1,3 +1,7 @@
+1.3.0
+===================================
+- Added excludeInputFields
+
 1.2.1-beta
 ===================================
 - Fix getExcludableApiTypes

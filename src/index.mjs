@@ -119,7 +119,6 @@ export default class PrismaModule {
 
     apiSchema = this.cleanupApiSchema(apiSchema, excludeTypes);
 
-
     return apiSchema;
 
   }
@@ -127,68 +126,141 @@ export default class PrismaModule {
 
   cleanupApiSchema(baseSchema, excludeTypes = []) {
 
-    if (excludeTypes.length) {
+    // if (excludeTypes.length) {
 
-      const parsed = parse(baseSchema);
+    const parsed = parse(baseSchema);
 
-      if (parsed && parsed.definitions) {
+    if (parsed && parsed.definitions) {
 
-        this.cleanupDefinitions(parsed, excludeTypes);
+      this.cleanupDefinitions(parsed, excludeTypes);
 
-        baseSchema = print(parsed);
-
-      }
-
+      baseSchema = print(parsed);
 
     }
+
+
+    // }
 
     return baseSchema;
   }
 
 
-  cleanupDefinitions(schema, excludeTypes) {
+  cleanupDefinitions(schema, excludeTypes, excludeInputFields = [
+    "create",
+    "delete",
+    "update",
+    "upsert",
+  ]) {
 
 
     let {
       definitions,
     } = schema;
 
-    if (excludeTypes && definitions) {
 
-      excludeTypes.map(excludeName => {
+    if (definitions) {
 
-        const before = definitions.length;
+      if (excludeTypes) {
 
-        definitions.reduce((current, next) => {
+        excludeTypes.map(excludeName => {
+
+          // const before = definitions.length;
+
+          definitions.reduce((current, next) => {
+
+            if (
+              [
+                "InputObjectTypeDefinition",
+                "ObjectTypeDefinition",
+                "EnumTypeDefinition",
+              ].indexOf(next.kind) !== -1
+              && next.name.value === excludeName
+            ) {
+
+              let index = current.findIndex(n => n && n.name && n.name.value === excludeName);
+
+              if (index !== -1) {
+
+                current.splice(index, 1);
+
+              }
+
+            }
+
+
+            return current;
+
+          }, definitions);
+
+          // const after = definitions.length;
+
+
+        });
+
+
+      }
+
+      /**
+       * Cleanup create/update inputs
+       */
+
+      if (excludeInputFields && excludeInputFields.length) {
+
+
+        definitions.map(definition => {
+
 
           if (
             [
               "InputObjectTypeDefinition",
-              "ObjectTypeDefinition",
-              "EnumTypeDefinition",
-            ].indexOf(next.kind) !== -1
-            && next.name.value === excludeName
+            ].indexOf(definition.kind) !== -1
           ) {
 
-            let index = current.findIndex(n => n && n.name && n.name.value === excludeName);
 
-            if (index !== -1) {
+            if (definition.fields && definition.fields.length) {
 
-              current.splice(index, 1);
+              definition.fields = definition.fields.filter(n => {
+
+                const name = n && n.name ? n.name.value : null;
+
+
+                // console.log("InputObjectTypeDefinition name", name);
+
+                return name && excludeInputFields.indexOf(name) !== -1 ? false : true;
+
+              });
+
+            }
+
+          }
+
+        });
+
+
+
+        schema.definitions = definitions.filter(definition => {
+
+          if (
+            [
+              "InputObjectTypeDefinition",
+            ].indexOf(definition.kind) !== -1
+          ) {
+
+
+            if (definition.fields && !definition.fields.length) {
+
+              return false;
 
             }
 
           }
 
 
-          return current;
+          return true;
 
-        }, definitions);
+        });
 
-        const after = definitions.length;
-
-
-      });
+      }
 
     }
 
