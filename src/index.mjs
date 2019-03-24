@@ -22,7 +22,12 @@ export default class PrismaModule {
 
     const {
       modules = [],
+      parentModules = [],
     } = options;
+
+    this.parentModules = parentModules;
+
+    parentModules.push(this);
 
     this.mergeModules(modules);
 
@@ -31,11 +36,49 @@ export default class PrismaModule {
 
   mergeModules(modules) {
 
+    if (!modules) {
+      return;
+    }
+
+
     this.modules = this.modules || [];
+
+
+    modules = modules.filter(module => {
+
+      let exists = this.modules.find(n => {
+
+        // console.log("module instanceof", module, n, n instanceof module);
+
+        return n instanceof module;
+
+      });
+
+      if (!exists) {
+
+        exists = this.parentModules.find(n => {
+
+          // console.log("module instanceof", module, n, n instanceof module);
+
+          return n instanceof module;
+
+        });
+
+      }
+
+      return exists ? false : true;
+
+    });
+
 
     modules.map(module => {
 
-      this.modules.push(new module())
+      // console.log("module", module, this.modules);
+
+      this.modules.push(new module({
+        parentModules: this.parentModules,
+      }))
+
 
     })
 

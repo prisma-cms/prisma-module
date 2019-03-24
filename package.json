@@ -1,6 +1,6 @@
 {
   "name": "@prisma-cms/prisma-module",
-  "version": "1.3.0",
+  "version": "1.3.4",
   "description": "",
   "main": "src/",
   "files": [
