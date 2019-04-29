@@ -106,9 +106,40 @@ export default class PrismaModule {
       Object.assign(Query, ModuleQuery);
       Object.assign(Mutation, ModuleMutation);
       Object.assign(Subscription, ModuleSubscription);
-      Object.assign(OtherResolvers, ModuleOtherResolvers);
+
+      if (ModuleOtherResolvers) {
+
+        const names = Object.keys(ModuleOtherResolvers);
+
+        names.map(name => {
+
+          const value = ModuleOtherResolvers[name];
+
+          /**
+           * Если свойства еще нет, то присваиваем новое значение.
+           * Если есть, и если это объект, то объединяем их
+           */
+          if (typeof OtherResolvers[name] === "object") {
+
+            Object.assign(OtherResolvers[name], { ...value });
+
+          }
+          else {
+            OtherResolvers[name] = value;
+          }
+
+
+        });
+
+      }
+
+
+      // console.log("PrismaModule resolvers ModuleOtherResolvers", { ...ModuleOtherResolvers });
 
     });
+
+
+    // console.log("PrismaModule resolvers OtherResolvers", { ...OtherResolvers });
 
     return {
       ...OtherResolvers,
